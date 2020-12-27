@@ -29,6 +29,19 @@ class ApiShortenerController extends Controller
         }
     }
 
+    public function handleShortUrl(string $shortUrl)
+    {
+        $shortUrl = trim($shortUrl);
+
+        try {
+            $originalUrl = $this->shortenersHandler->getOriginalUrl($shortUrl);
+
+            return redirect()->to($originalUrl);
+        } catch (\Throwable $e) {
+            return $this->createErrorResponse($e);
+        }
+    }
+
     private function createErrorResponse(\Throwable $e)
     {
         return response()->json([
