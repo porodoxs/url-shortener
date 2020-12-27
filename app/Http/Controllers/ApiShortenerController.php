@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Shorteners\Shorteners\ShortenersHandler;
 use Illuminate\Http\Request;
 
 class ApiShortenerController extends Controller
 {
-    public function __construct()
-    {
+    private $shortenersHandler;
 
+    public function __construct(ShortenersHandler $shortenersHandler)
+    {
+        $this->shortenersHandler = $shortenersHandler;
     }
 
     public function getShortUrl(Request $request)
@@ -16,10 +19,10 @@ class ApiShortenerController extends Controller
         $url = $request->get('url');
 
         try {
-            $shortUrl = "HfO2g1";
+            $shortUrl = $this->shortenersHandler->getShortUrl($url);
 
             return response()->json([
-                'short_url' => $request->root() . '/' . $shortUrl
+                'short_url' => $request->root() . '/' . $shortUrl['short_url']
             ]);
         } catch (\Throwable $e) {
             return $this->createErrorResponse($e);

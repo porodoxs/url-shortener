@@ -99,6 +99,7 @@ $app->configure('encoder');
 $app->register(LaravelDoctrine\ORM\DoctrineServiceProvider::class);
 $app->register(LaravelDoctrine\Migrations\MigrationsServiceProvider::class);
 $app->register(Illuminate\Redis\RedisServiceProvider::class);
+$app->register(App\Providers\EncoderServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
