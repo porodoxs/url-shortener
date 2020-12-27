@@ -14,3 +14,5 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->post('/v1/urls/get-short-url', ['uses' => 'ApiShortenerController@getShortUrl']);
