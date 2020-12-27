@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+export USER_ID=$(id -u)
+export GROUP_ID=$(id -g)
+
+export $(cat ./build/.env.base)
+
+docker network create porodoxs
+
+export COMPOSE_FILE=docker-compose.yml
+export COMPOSE_PROJECT=url-shortener
+
+docker-compose build
+docker-compose up -d --remove-orphans
+docker-compose run --rm php-fpm /usr/bin/composer install --no-plugins --no-scripts
+docker-compose run --rm php-fpm php artisan do:mi:mi --no-interaction --force
+docker-compose logs -f

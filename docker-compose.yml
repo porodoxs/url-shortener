@@ -1,0 +1,56 @@
+version: '3.6'
+
+networks:
+  default:
+    external:
+      name: porodoxs
+
+volumes:
+  dbdata:
+
+services:
+  nginx:
+    container_name: url-shortener-nginx
+    build:
+      context: ./
+      dockerfile: build/nginx/Dockerfile
+    volumes:
+      - ./public:/var/www/url-shortener/public
+    restart: 'no'
+    env_file: ./build/.env.list
+    ports:
+      - "8080:80"
+    depends_on:
+      - php-fpm
+
+  php-fpm:
+    container_name: url-shortener-php-fpm
+    build:
+      context: ./
+      dockerfile: build/php-fpm/Dockerfile
+    volumes:
+      - ./:/var/www/url-shortener
+    restart: 'no'
+    env_file: ./build/.env.list
+
+  postgresql:
+    container_name: url-shortener-postgres
+    image: postgres:12.3-alpine
+    volumes:
+      - ./dbdata:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    env_file: ./build/.env.list
+    restart: "no"
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: shortener
+
+  redis:
+    container_name: url-shortener-redis
+    image: redis:latest
+    ports:
+      - "63791:6379"
+    restart: "no"
+    env_file: ./build/.env.list
