@@ -6,6 +6,7 @@
     "type": "project",
     "require": {
         "php": "^7.2.5",
+        "hashids/hashids": "^4.1",
         "illuminate/redis": "^7.0",
         "laravel-doctrine/migrations": "^2.0",
         "laravel-doctrine/orm": "^1.6",
